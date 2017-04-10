@@ -1,4 +1,4 @@
-[production]
+[global]
 # My production information
 linode_api_key=****
 root_password=****
