@@ -1,3 +1,10 @@
+add_header X-Frame-Options SAMEORIGIN;
+add_header X-Content-Type-Options nosniff;
+add_header X-XSS-Protection "1; mode=block";
+add_header Strict-Transport-Security "max-age=31536000";
+add_header Referrer-Policy origin;
+#add-header Content-Security-Policy "script-src 'self' https://fonts.googleapis.com";
+
 {% for vhost in nginx_reverse_proxy_vhosts %}
 server {
   listen {{ vhost.listen | default('80 default_server') }};
