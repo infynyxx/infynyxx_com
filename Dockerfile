@@ -1,7 +1,9 @@
 FROM golang:1.8-onbuild
 WORKDIR /app
 
-COPY . /app
+COPY static /app/static
+COPY main.go /app/
+COPY Makefile /app/
 RUN make all
 
 ENTRYPOINT /app/bin/infynyxx_com
