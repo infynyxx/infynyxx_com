@@ -4,7 +4,7 @@ WORKDIR /app
 COPY static /app/static
 COPY main.go /app/
 COPY Makefile /app/
-RUN make all
+RUN make
 
 ENTRYPOINT /app/bin/infynyxx_com
 
