@@ -1,4 +1,10 @@
+run_ansible.egg-info/*
+*.pyc
+*.DS_Store
+*.swp
+*.retry
 .gopath~
 bin
 target
 vendor
+ansible/config.ini
