@@ -1,0 +1,89 @@
+---
+- name: launch Linode server
+  tags: linode
+  hosts: localhost
+  connection: local
+  vars:
+    config_file: "config.ini"
+    server_name: web1
+
+  tasks:
+  - stat: path="{{ config_file }}"
+    register: config_path
+
+  - fail:
+      msg: "config file={{ config_file }} doesn't exist"
+    when: not config_path.stat.exists
+
+  - name: Create linode server via Linode API if linode_id is defined
+    linode:
+      api_key: "{{ lookup('ini', 'linode_api_key file=' + config_file) }}"
+      name: "{{ server_name }}"
+      plan: 1 # 2048 MB
+      datacenter: 6 #newark
+      distribution: 146 # Ubuntu 16.04 LTS
+      password: "{{ lookup('ini', 'root_password file=' + config_file) }}"
+      ssh_pub_key: "{{ lookup('ini', 'root_ssh_pub_key file=' + config_file) }}"
+      wait: yes
+      wait_timeout: 600
+      linode_id: "{{ lookup('ini', 'linode_id file=' + config_file) }}"
+      state: present
+    register: linode
+
+  - name: Show me the registered linode
+    debug: var=linode
+
+  - name: Add new host to in-memory inventory
+    add_host:
+      hostname: "{{ linode.instance.ipv4 }}"
+      groupname: "linode"
+
+  - name: Wait for Linode to listen on port 22
+    wait_for:
+      state: started
+      host: "{{ linode.instance.ipv4 }}"
+      port: 22
+
+- name: Common configuration on the new server
+  tags: docker
+  hosts: linode
+  user: root
+
+  vars:
+    server_name: web1
+    server_fqdn: "{{ server_name }}.infynyxx.com"
+
+  tasks:
+    - name: set hostname
+      hostname: name="{{ server_name }}"
+
+    - name: set FQDN
+      lineinfile:
+        dest=/etc/hosts
+        regexp='{{ item }}$'
+        line="{{ item }} {{ server_fqdn }} {{ server_name }}"
+        state=present
+      with_items: groups['linode']
+
+    - name: ssh key only
+      copy: src=files/ssh/sshd_config dest=/etc/ssh/sshd_config
+      notify: restart ssh
+
+    - include: docker.yml
+
+  handlers:
+    - name: restart ssh
+      service: name=ssh state=restarted
+
+- name: Install Nginx
+  tags: nginx
+  hosts: linode
+  user: root
+  sudo: true
+  gather_facts: true
+  roles:
+    - role: nginx
+      instance_type: proxy
+      domain_name: infynyxx.com
+      letsencrypt_email: praj@infynyxx.com
+      nginx_remove_default_vhost: True

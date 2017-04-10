@@ -1,0 +1,6 @@
+[production]
+# My production information
+linode_api_key=****
+root_password=****
+root_ssh_pub_key=
+linode_id=295900

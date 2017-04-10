@@ -1,0 +1,5 @@
+nginx_reverse_proxy_vhosts:
+  - listen: 443 ssl
+    server_name: infynyxx.com
+    proxy_url: http://localhost:8080
+    domain_name: infynyxx.com
