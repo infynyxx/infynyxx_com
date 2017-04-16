@@ -19,6 +19,6 @@ $ docker-compose build && docker-compose up
 
 ## ToDos
 
-- [] Configure cron to renew LetsEncrypt cert
-- [] Write tests for `main.go`
-- [] Write ansible tests
+- [ ] Configure cron to renew LetsEncrypt cert
+- [ ] Write tests for `main.go`
+- [ ] Write ansible tests
