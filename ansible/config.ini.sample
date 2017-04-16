@@ -1,6 +1,7 @@
 [global]
-# My production information
 linode_api_key=****
 root_password=****
 root_ssh_pub_key=
+# if linode_id field is empty, it will create new linode instance everytime so,
+# after creating one, make sure to use that linode id here
 linode_id=295900
