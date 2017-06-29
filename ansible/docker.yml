@@ -1,6 +1,11 @@
 ---
 - include_vars: "vars/default.yml"
 
+- name: apt-get update
+  apt:
+    update_cache=yes
+  sudo: True
+
 - name: install required packages for Docker
   apt:
     name="{{ item }}"
