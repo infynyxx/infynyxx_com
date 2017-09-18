@@ -23,7 +23,6 @@
     nginx_user: "{{ __nginx_user }}"
   when: nginx_user is not defined
 
-
 - name: Ensure nginx is installed.
   apt:
     name: "{{ nginx_package_name }}"
@@ -38,11 +37,9 @@
     owner: root
     group: "{{ root_group }}"
     mode: 0644
-  notify:
-    - reload nginx
 
 - name: Ensure nginx is started and enabled to start at boot.
-  service: name=nginx state=started enabled=yes
+  service: name=nginx state=restarted enabled=yes
 
 - name: install letsencrypt
   apt: name=letsencrypt state=latest
