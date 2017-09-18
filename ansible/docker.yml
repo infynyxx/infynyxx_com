@@ -43,7 +43,7 @@
   sudo: true
 
 - name: Install Docker CE.
-  apt: pkg=docker-ce=17.03.1~ce-0~ubuntu-xenial state=present
+  apt: pkg=docker-ce=17.06.0~ce-0~ubuntu state=present
 
 - name: Run test docker image
   shell: docker run hello-world
@@ -51,14 +51,18 @@
   failed_when: "docker_test_run.rc != 0"
 
 - name: install docker-py
-  pip: name=docker-py
+  pip: 
+    name: docker-py
+    version: 1.10.6
 
 - name: Restart a container
   docker_container:
     name: HTTPServer
-    image: infynyxx/infynyxxcom_http_server
+    image: infynyxx/infynyxxcom_http_server:latest
     state: started
-    restart: yes
+    restart_policy: unless-stopped
+    #restart: yes
+    pull: true
     ports:
      - "127.0.0.1:8080:8080" # if host is not provided it will bind to 0.0.0.0 and will be exposed to internet
   register: docker_container
