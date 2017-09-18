@@ -1,5 +1,7 @@
-FROM golang:1.8-onbuild
+FROM golang:1.9-alpine
 WORKDIR /app
+
+RUN apk add --no-cache curl make
 
 COPY static /app/static
 COPY main.go /app/
