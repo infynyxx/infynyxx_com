@@ -79,7 +79,7 @@
   tags: nginx
   hosts: linode
   user: root
-  sudo: true
+  become: true
   gather_facts: true
   roles:
     - role: nginx
