@@ -69,7 +69,7 @@
       copy: src=files/ssh/sshd_config dest=/etc/ssh/sshd_config
       notify: restart ssh
 
-    - include: docker.yml
+    - include_tasks: docker.yml
 
   handlers:
     - name: restart ssh

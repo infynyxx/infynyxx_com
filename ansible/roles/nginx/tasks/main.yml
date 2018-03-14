@@ -54,6 +54,6 @@
   when: nginx_remove_default_vhost
   notify: restart nginx  
 
-- include: letsencrypt.yml
+- include_tasks: letsencrypt.yml
 
-- include: vhosts.yml
+- include_tasks: vhosts.yml
