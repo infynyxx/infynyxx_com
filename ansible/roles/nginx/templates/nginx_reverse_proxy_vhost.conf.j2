@@ -37,9 +37,10 @@ server {
   }
 
   location / {
-    proxy_set_header   X-Forwarded-For $remote_addr;
-    proxy_set_header   Host $http_host;
-    proxy_pass         {{ vhost.proxy_url }};
+    #proxy_set_header   X-Forwarded-For $remote_addr;
+    #proxy_set_header   Host $http_host;
+    #proxy_pass         {{ vhost.proxy_url }};
+    return 301 https://www.tuladhar.dev/;
   }
 }
 {% endfor %}
